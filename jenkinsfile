@@ -1,0 +1,41 @@
+pipeline {
+    agent any
+    environment {
+        imageName = ""
+    }
+    stages {
+        stage('Step 1 Git') {
+            steps {
+                git 'https://github.com/adwait22/calculator'
+            }
+        }
+         stage('Step 2 Maven') {
+            steps {
+                 sh 'mvn clean install'
+            }
+        }
+         stage('Step 3 Docker_Image')
+          {
+              steps {
+                  script {
+                    imageName = docker.build "adwait2210/calc_mini:calc_devops"
+                    }
+              }
+          }
+         stage('Step 4 Push Docker Image')
+        {
+            steps {
+                script{
+                  docker.withRegistry('', 'dockerhub-cred-adwait') {
+                       imageName.push()
+                  }
+                }
+            }
+        }
+        stage('Step 5 Ansible'){
+            steps{
+                ansiblePlaybook becomeUser: null, colorized: true, disableHostKeyChecking: true, installation: 'Ansible', inventory: 'inventory', playbook: 'playbook.yml', sudoUser: null
+            }
+        }
+    }
+}

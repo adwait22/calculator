@@ -1,0 +1,8 @@
+---
+- name: Pull docker image of calculatordevops
+  hosts: all
+  tasks:
+    - name: Pull calculatordevops devops image
+      docker_image:
+        name: adwait2210/calc_mini
+        source: pull

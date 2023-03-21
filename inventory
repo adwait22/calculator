@@ -1,0 +1,1 @@
+localhost 172.17.0.1 ansible_ssh_user = adwait ansible_ssh_pass = adwait@22
